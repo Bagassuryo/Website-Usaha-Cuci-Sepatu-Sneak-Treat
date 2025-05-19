@@ -4,7 +4,6 @@ MySQL - 10.4.32-MariaDB : Database - db_sepatu
 *********************************************************************
 */
 
-
 /*!40101 SET NAMES utf8 */;
 
 /*!40101 SET SQL_MODE=''*/;
@@ -38,15 +37,10 @@ CREATE TABLE `akun` (
 LOCK TABLES `akun` WRITE;
 
 insert  into `akun`(`idAkun`,`Email_Akun`,`Password_Akun`,`Customer_idCustomer`,`role`) values 
-
 (1,'andi@email.com','$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',1,'customer'),
-
 (2,'budi@email.com','$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',2,'customer'),
-
 (3,'citra@email.com','$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',3,'customer'),
-
 (4,'dian@email.com','$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',4,'customer'),
-
 (5,'eko@email.com','$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',5,'customer');
 
 UNLOCK TABLES;
@@ -70,15 +64,10 @@ CREATE TABLE `customer` (
 LOCK TABLES `customer` WRITE;
 
 insert  into `customer`(`idCustomer`,`Nama`,`Alamat`,`Kode_Unik`,`No_Telepon`,`Tanggal_Daftar`) values 
-
 (1,'Andi Wijaya','Jl. Merdeka No. 10, Jakarta','CUST001','08123456789','2023-01-15 10:00:00'),
-
 (2,'Budi Santoso','Jl. Sudirman No. 25, Bandung','CUST002','08234567890','2023-02-20 11:30:00'),
-
 (3,'Citra Dewi','Jl. Gatot Subroto No. 5, Surabaya','CUST003','08345678901','2023-03-10 09:15:00'),
-
 (4,'Dian Pratama','Jl. Thamrin No. 15, Medan','CUST004','08456789012','2023-04-05 14:20:00'),
-
 (5,'Eko Nugroho','Jl. Diponegoro No. 30, Yogyakarta','CUST005','08567890123','2023-05-12 16:45:00');
 
 UNLOCK TABLES;
@@ -107,23 +96,14 @@ CREATE TABLE `detail_pesanan` (
 LOCK TABLES `detail_pesanan` WRITE;
 
 insert  into `detail_pesanan`(`idDetail_Pesanan`,`Pesanan_idPesanan`,`Sepatu_idSepatu`,`Layanan_idLayanan`,`Harga_Satuan`) values 
-
 (1,1,1,2,80000.00),
-
 (2,1,2,1,50000.00),
-
 (3,2,4,4,150000.00),
-
 (4,2,4,5,30000.00),
-
 (5,3,3,3,100000.00),
-
 (6,4,6,2,80000.00),
-
 (7,4,6,5,120000.00),
-
 (8,4,6,4,30000.00),
-
 (9,5,5,2,80000.00);
 
 UNLOCK TABLES;
@@ -146,15 +126,10 @@ CREATE TABLE `layanan` (
 LOCK TABLES `layanan` WRITE;
 
 insert  into `layanan`(`idLayanan`,`Nama_Layanan`,`Deskripsi`,`Harga`,`Durasi_Pengerjaan`) values 
-
 (1,'Cuci Biasa','Cuci dasar tanpa perawatan khusus',50000.00,24),
-
 (2,'Cuci Premium','Cuci dengan deterjen khusus dan perawatan',80000.00,24),
-
 (3,'Cuci Express','Cuci cepat selesai dalam 6 jam',100000.00,6),
-
 (4,'Repaint','Pengecatan ulang sepatu',150000.00,48),
-
 (5,'Waterproofing','Perawatan anti air',120000.00,24);
 
 UNLOCK TABLES;
@@ -180,15 +155,10 @@ CREATE TABLE `pembayaran` (
 LOCK TABLES `pembayaran` WRITE;
 
 insert  into `pembayaran`(`idPembayaran`,`Metode_Pembayaran`,`Jumlah_Pembayaran`,`Status_Pembayaran`,`Tanggal_Pembayaran`,`Pesanan_idPesanan`) values 
-
 (1,'Transfer Bank',130000.00,'Lunas','2023-06-01 11:00:00',1),
-
 (2,'E-Wallet',180000.00,'Lunas','2023-06-02 14:30:00',2),
-
 (3,'Tunai',100000.00,'Lunas','2023-06-03 09:05:00',3),
-
 (4,'Kartu Kredit',230000.00,'Lunas','2023-06-04 17:00:00',4),
-
 (5,'Transfer Bank',80000.00,'Menunggu',NULL,5);
 
 UNLOCK TABLES;
@@ -214,15 +184,10 @@ CREATE TABLE `pesanan` (
 LOCK TABLES `pesanan` WRITE;
 
 insert  into `pesanan`(`idPesanan`,`Tanggal_Pesanan`,`Status_Pesanan`,`Total_Harga`,`Catatan_Khusus`,`Customer_idCustomer`) values 
-
 (1,'2023-06-01 10:30:00','Selesai',130000.00,'Harap dikeringkan dengan baik',1),
-
 (2,'2023-06-02 14:15:00','Diproses',180000.00,'Warna merah jangan luntur',3),
-
 (3,'2023-06-03 09:00:00','Menunggu',100000.00,'Butuh cepat untuk event besok',2),
-
 (4,'2023-06-04 16:45:00','Selesai',230000.00,'Perawatan khusus untuk kulit',5),
-
 (5,'2023-06-05 11:20:00','Diproses',80000.00,NULL,4);
 
 UNLOCK TABLES;
@@ -248,19 +213,12 @@ CREATE TABLE `sepatu` (
 LOCK TABLES `sepatu` WRITE;
 
 insert  into `sepatu`(`idSepatu`,`Jenis_Sepatu`,`Merk_Sepatu`,`Warna_Sepatu`,`Ukuran_Sepatu`,`Customer_idCustomer`) values 
-
 (1,'Sneakers','Nike','Putih','42',1),
-
 (2,'Running','Adidas','Hitam','40',1),
-
 (3,'Casual','Converse','Biru','39',2),
-
 (4,'Basket','Air Jordan','Merah','45',3),
-
 (5,'Sport','Puma','Abu-abu','41',4),
-
 (6,'Boots','Dr. Martens','Coklat','43',5),
-
 (7,'Slip-on','Vans','Hitam','38',2);
 
 UNLOCK TABLES;
