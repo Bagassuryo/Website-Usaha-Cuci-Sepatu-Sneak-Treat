@@ -16,6 +16,28 @@ CREATE DATABASE /*!32312 IF NOT EXISTS*/`db_sepatu` /*!40100 DEFAULT CHARACTER S
 
 USE `db_sepatu`;
 
+/*Table structure for table `admin` */
+
+DROP TABLE IF EXISTS `admin`;
+
+CREATE TABLE `admin` (
+  `id_admin` int(11) NOT NULL AUTO_INCREMENT,
+  `nama_admin` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  PRIMARY KEY (`id_admin`),
+  UNIQUE KEY `email` (`email`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+/*Data for the table `admin` */
+
+LOCK TABLES `admin` WRITE;
+
+insert  into `admin`(`id_admin`,`nama_admin`,`email`,`password`) values 
+(1,'Admin Utama','admin@example.com','password123');
+
+UNLOCK TABLES;
+
 /*Table structure for table `akun` */
 
 DROP TABLE IF EXISTS `akun`;
@@ -25,7 +47,6 @@ CREATE TABLE `akun` (
   `Email_Akun` varchar(100) NOT NULL,
   `Password_Akun` varchar(255) NOT NULL,
   `Customer_idCustomer` int(11) DEFAULT NULL,
-  `role` enum('admin','customer') DEFAULT 'customer',
   PRIMARY KEY (`idAkun`),
   UNIQUE KEY `Email_Akun` (`Email_Akun`),
   KEY `Customer_idCustomer` (`Customer_idCustomer`),
@@ -36,12 +57,12 @@ CREATE TABLE `akun` (
 
 LOCK TABLES `akun` WRITE;
 
-insert  into `akun`(`idAkun`,`Email_Akun`,`Password_Akun`,`Customer_idCustomer`,`role`) values 
-(1,'andi@email.com','$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',1,'customer'),
-(2,'budi@email.com','$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',2,'customer'),
-(3,'citra@email.com','$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',3,'customer'),
-(4,'dian@email.com','$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',4,'customer'),
-(5,'eko@email.com','$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',5,'customer');
+insert  into `akun`(`idAkun`,`Email_Akun`,`Password_Akun`,`Customer_idCustomer`) values 
+(1,'andi@email.com','$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',1),
+(2,'budi@email.com','$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',2),
+(3,'citra@email.com','$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',3),
+(4,'dian@email.com','$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',4),
+(5,'eko@email.com','$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',5);
 
 UNLOCK TABLES;
 
@@ -115,22 +136,26 @@ DROP TABLE IF EXISTS `layanan`;
 CREATE TABLE `layanan` (
   `idLayanan` int(11) NOT NULL AUTO_INCREMENT,
   `Nama_Layanan` varchar(100) NOT NULL,
-  `Deskripsi` text DEFAULT NULL,
   `Harga` decimal(10,2) NOT NULL,
-  `Durasi_Pengerjaan` int(11) DEFAULT NULL,
+  `Durasi_Pengerjaan` varchar(255) DEFAULT NULL,
+  `Durasi_Pengerjaan_express` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`idLayanan`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `layanan` */
 
 LOCK TABLES `layanan` WRITE;
 
-insert  into `layanan`(`idLayanan`,`Nama_Layanan`,`Deskripsi`,`Harga`,`Durasi_Pengerjaan`) values 
-(1,'Cuci Biasa','Cuci dasar tanpa perawatan khusus',50000.00,24),
-(2,'Cuci Premium','Cuci dengan deterjen khusus dan perawatan',80000.00,24),
-(3,'Cuci Express','Cuci cepat selesai dalam 6 jam',100000.00,6),
-(4,'Repaint','Pengecatan ulang sepatu',150000.00,48),
-(5,'Waterproofing','Perawatan anti air',120000.00,24);
+insert  into `layanan`(`idLayanan`,`Nama_Layanan`,`Harga`,`Durasi_Pengerjaan`,`Durasi_Pengerjaan_express`) values 
+(1,'Cuci Biasa',50000.00,'1 Hari','2-3 hari'),
+(2,'Cuci Premium',80000.00,'2 Hari','3-4 hari'),
+(3,'Cuci Express',100000.00,'1 Hari','1-2 hari'),
+(4,'Repaint',150000.00,'5 hari','4-5 hari'),
+(5,'Waterproofing',120000.00,'2 hari','2 hari'),
+(6,'Tes',500000.00,'1','8'),
+(7,'Tes',1222222.00,'1-2 hari','2 hari'),
+(8,'1',22220.00,'1','2'),
+(9,'1',2222.00,'1','4');
 
 UNLOCK TABLES;
 
