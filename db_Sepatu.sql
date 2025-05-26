@@ -4,6 +4,7 @@ MySQL - 10.4.32-MariaDB : Database - db_sepatu
 *********************************************************************
 */
 
+
 /*!40101 SET NAMES utf8 */;
 
 /*!40101 SET SQL_MODE=''*/;
@@ -34,6 +35,7 @@ CREATE TABLE `admin` (
 LOCK TABLES `admin` WRITE;
 
 insert  into `admin`(`id_admin`,`nama_admin`,`email`,`password`) values 
+
 (1,'Admin Utama','admin@example.com','password123');
 
 UNLOCK TABLES;
@@ -58,10 +60,15 @@ CREATE TABLE `akun` (
 LOCK TABLES `akun` WRITE;
 
 insert  into `akun`(`idAkun`,`Email_Akun`,`Password_Akun`,`Customer_idCustomer`) values 
+
 (1,'andi@email.com','$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',1),
+
 (2,'budi@email.com','$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',2),
+
 (3,'citra@email.com','$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',3),
+
 (4,'dian@email.com','$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',4),
+
 (5,'eko@email.com','$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',5);
 
 UNLOCK TABLES;
@@ -85,47 +92,16 @@ CREATE TABLE `customer` (
 LOCK TABLES `customer` WRITE;
 
 insert  into `customer`(`idCustomer`,`Nama`,`Alamat`,`Kode_Unik`,`No_Telepon`,`Tanggal_Daftar`) values 
+
 (1,'Andi Wijaya','Jl. Merdeka No. 10, Jakarta','CUST001','08123456789','2023-01-15 10:00:00'),
+
 (2,'Budi Santoso','Jl. Sudirman No. 25, Bandung','CUST002','08234567890','2023-02-20 11:30:00'),
+
 (3,'Citra Dewi','Jl. Gatot Subroto No. 5, Surabaya','CUST003','08345678901','2023-03-10 09:15:00'),
+
 (4,'Dian Pratama','Jl. Thamrin No. 15, Medan','CUST004','08456789012','2023-04-05 14:20:00'),
+
 (5,'Eko Nugroho','Jl. Diponegoro No. 30, Yogyakarta','CUST005','08567890123','2023-05-12 16:45:00');
-
-UNLOCK TABLES;
-
-/*Table structure for table `detail_pesanan` */
-
-DROP TABLE IF EXISTS `detail_pesanan`;
-
-CREATE TABLE `detail_pesanan` (
-  `idDetail_Pesanan` int(11) NOT NULL AUTO_INCREMENT,
-  `Pesanan_idPesanan` int(11) DEFAULT NULL,
-  `Sepatu_idSepatu` int(11) DEFAULT NULL,
-  `Layanan_idLayanan` int(11) DEFAULT NULL,
-  `Harga_Satuan` decimal(10,2) DEFAULT NULL,
-  PRIMARY KEY (`idDetail_Pesanan`),
-  KEY `Pesanan_idPesanan` (`Pesanan_idPesanan`),
-  KEY `Sepatu_idSepatu` (`Sepatu_idSepatu`),
-  KEY `Layanan_idLayanan` (`Layanan_idLayanan`),
-  CONSTRAINT `detail_pesanan_ibfk_1` FOREIGN KEY (`Pesanan_idPesanan`) REFERENCES `pesanan` (`idPesanan`),
-  CONSTRAINT `detail_pesanan_ibfk_2` FOREIGN KEY (`Sepatu_idSepatu`) REFERENCES `sepatu` (`idSepatu`),
-  CONSTRAINT `detail_pesanan_ibfk_3` FOREIGN KEY (`Layanan_idLayanan`) REFERENCES `layanan` (`idLayanan`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
-/*Data for the table `detail_pesanan` */
-
-LOCK TABLES `detail_pesanan` WRITE;
-
-insert  into `detail_pesanan`(`idDetail_Pesanan`,`Pesanan_idPesanan`,`Sepatu_idSepatu`,`Layanan_idLayanan`,`Harga_Satuan`) values 
-(1,1,1,2,80000.00),
-(2,1,2,1,50000.00),
-(3,2,4,4,150000.00),
-(4,2,4,5,30000.00),
-(5,3,3,3,100000.00),
-(6,4,6,2,80000.00),
-(7,4,6,5,120000.00),
-(8,4,6,4,30000.00),
-(9,5,5,2,80000.00);
 
 UNLOCK TABLES;
 
@@ -140,22 +116,23 @@ CREATE TABLE `layanan` (
   `Durasi_Pengerjaan` varchar(255) DEFAULT NULL,
   `Durasi_Pengerjaan_express` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`idLayanan`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `layanan` */
 
 LOCK TABLES `layanan` WRITE;
 
 insert  into `layanan`(`idLayanan`,`Nama_Layanan`,`Harga`,`Durasi_Pengerjaan`,`Durasi_Pengerjaan_express`) values 
+
 (1,'Cuci Biasa',50000.00,'1 Hari','2-3 hari'),
+
 (2,'Cuci Premium',80000.00,'2 Hari','3-4 hari'),
+
 (3,'Cuci Express',100000.00,'1 Hari','1-2 hari'),
+
 (4,'Repaint',150000.00,'5 hari','4-5 hari'),
-(5,'Waterproofing',120000.00,'2 hari','2 hari'),
-(6,'Tes',500000.00,'1','8'),
-(7,'Tes',1222222.00,'1-2 hari','2 hari'),
-(8,'1',22220.00,'1','2'),
-(9,'1',2222.00,'1','4');
+
+(5,'Waterproofing',120000.00,'2 hari','2 hari');
 
 UNLOCK TABLES;
 
@@ -171,7 +148,8 @@ CREATE TABLE `pembayaran` (
   `Tanggal_Pembayaran` datetime DEFAULT NULL,
   `Pesanan_idPesanan` int(11) DEFAULT NULL,
   PRIMARY KEY (`idPembayaran`),
-  KEY `Pesanan_idPesanan` (`Pesanan_idPesanan`),
+  KEY `fk_pembayaran_pesanan` (`Pesanan_idPesanan`),
+  CONSTRAINT `fk_pembayaran_pesanan` FOREIGN KEY (`Pesanan_idPesanan`) REFERENCES `pesanan` (`idPesanan`) ON DELETE CASCADE,
   CONSTRAINT `pembayaran_ibfk_1` FOREIGN KEY (`Pesanan_idPesanan`) REFERENCES `pesanan` (`idPesanan`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -180,11 +158,12 @@ CREATE TABLE `pembayaran` (
 LOCK TABLES `pembayaran` WRITE;
 
 insert  into `pembayaran`(`idPembayaran`,`Metode_Pembayaran`,`Jumlah_Pembayaran`,`Status_Pembayaran`,`Tanggal_Pembayaran`,`Pesanan_idPesanan`) values 
+
 (1,'Transfer Bank',130000.00,'Lunas','2023-06-01 11:00:00',1),
+
 (2,'E-Wallet',180000.00,'Lunas','2023-06-02 14:30:00',2),
-(3,'Tunai',100000.00,'Lunas','2023-06-03 09:05:00',3),
-(4,'Kartu Kredit',230000.00,'Lunas','2023-06-04 17:00:00',4),
-(5,'Transfer Bank',80000.00,'Menunggu',NULL,5);
+
+(4,'Kartu Kredit',230000.00,'Lunas','2023-06-04 17:00:00',4);
 
 UNLOCK TABLES;
 
@@ -200,7 +179,8 @@ CREATE TABLE `pesanan` (
   `Catatan_Khusus` text DEFAULT NULL,
   `Customer_idCustomer` int(11) DEFAULT NULL,
   PRIMARY KEY (`idPesanan`),
-  KEY `Customer_idCustomer` (`Customer_idCustomer`),
+  KEY `fk_customer_pesanan` (`Customer_idCustomer`),
+  CONSTRAINT `fk_customer_pesanan` FOREIGN KEY (`Customer_idCustomer`) REFERENCES `customer` (`idCustomer`) ON DELETE CASCADE,
   CONSTRAINT `pesanan_ibfk_1` FOREIGN KEY (`Customer_idCustomer`) REFERENCES `customer` (`idCustomer`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -209,11 +189,12 @@ CREATE TABLE `pesanan` (
 LOCK TABLES `pesanan` WRITE;
 
 insert  into `pesanan`(`idPesanan`,`Tanggal_Pesanan`,`Status_Pesanan`,`Total_Harga`,`Catatan_Khusus`,`Customer_idCustomer`) values 
+
 (1,'2023-06-01 10:30:00','Selesai',130000.00,'Harap dikeringkan dengan baik',1),
+
 (2,'2023-06-02 14:15:00','Diproses',180000.00,'Warna merah jangan luntur',3),
-(3,'2023-06-03 09:00:00','Menunggu',100000.00,'Butuh cepat untuk event besok',2),
-(4,'2023-06-04 16:45:00','Selesai',230000.00,'Perawatan khusus untuk kulit',5),
-(5,'2023-06-05 11:20:00','Diproses',80000.00,NULL,4);
+
+(4,'2023-06-04 16:45:00','Selesai',230000.00,'Perawatan khusus untuk kulit',5);
 
 UNLOCK TABLES;
 
@@ -238,12 +219,19 @@ CREATE TABLE `sepatu` (
 LOCK TABLES `sepatu` WRITE;
 
 insert  into `sepatu`(`idSepatu`,`Jenis_Sepatu`,`Merk_Sepatu`,`Warna_Sepatu`,`Ukuran_Sepatu`,`Customer_idCustomer`) values 
+
 (1,'Sneakers','Nike','Putih','42',1),
+
 (2,'Running','Adidas','Hitam','40',1),
+
 (3,'Casual','Converse','Biru','39',2),
+
 (4,'Basket','Air Jordan','Merah','45',3),
+
 (5,'Sport','Puma','Abu-abu','41',4),
+
 (6,'Boots','Dr. Martens','Coklat','43',5),
+
 (7,'Slip-on','Vans','Hitam','38',2);
 
 UNLOCK TABLES;
