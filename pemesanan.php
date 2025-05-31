@@ -1,5 +1,4 @@
 <?php
-// Proses data form jika dikirim
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $nama = $_POST["nama"];
     $no_hp = $_POST["no_hp"];
