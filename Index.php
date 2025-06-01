@@ -13,19 +13,16 @@
   <div class="mx-auto flex h-16 max-w-screen-xl items-center gap-8 px-4 sm:px-6 lg:px-8">
     <a class="block text-teal-600 dark:text-teal-300" href="#">
       <span class="sr-only">Home</span>
-      <img src="Logo.jpg" alt="Logo" class="h-12 rounded-full" viewBox="0 0 28 24" fill="none"> </img>
+      <img src="Gambar/Logo.jpg" alt="Logo" class="h-12 rounded-full" viewBox="0 0 28 24" fill="none"> </img>
     </a>
 
     <div class="flex flex-1 items-center justify-end md:justify-between">
       <nav aria-label="Global" class="hidden md:block">
         <ul class="flex items-center gap-6 text-sm">
-          <li> <a class="text-white transition hover:text-yellow-400" href="#"> About </a> </li>
 
           <li> <a class="text-white transition hover:text-yellow-400" href="#Gallery"> Gallery </a> </li>
-
-          <li> <a class="text-white transition hover:text-yellow-400" href="#"> Maps </a> </li>
-
-          <li> <a class="text-white transition hover:text-yellow-400" href="#"> Contact </a> </li>
+          <li> <a class="text-white transition hover:text-yellow-400" href="#Maps"> Maps </a> </li>
+          <li> <a class="text-white transition hover:text-yellow-400" href="#Contact"> Contact </a> </li>
 
         </ul>
       </nav>
@@ -65,11 +62,11 @@
                 <h2 class="text-white text-4xl md:text-5xl font-bold max-w-xl mb-6 leading-tight">Solusi Cuci Sepatu Profesional - Cepat, Bersih, Aman.</h2>
 
                 <div class="mt-4 flex gap-4 sm:mt-6">
-                    <a class="inline-block rounded border border-yellow-400 bg-yellow-400 px-5 py-3 font-medium text-black shadow-sm transition-colors hover:bg-yellow-300" href="#"> Pesan Sekarang </a>
+                    <a class="inline-block rounded border border-yellow-400 bg-yellow-400 px-5 py-3 font-medium text-black shadow-sm transition-colors hover:bg-yellow-300" href="pemesanan.php"> Pesan Sekarang </a>
                     <a class="inline-block rounded border border-gray-200 px-5 py-3 font-medium text-white shadow-sm transition-colors hover:bg-gray-50 hover:text-black" href="#layanan"> Layanan Kami </a>
                 </div>
             </div>
-            <img src="Sepatuu.png" alt="Sepatu" class="bottom-30 w-100 h-100 rounded-full bg-yellow-400 md:justify-self-end md:self-start mx-auto md:mx-0">
+            <img src="Gambar/Sepatuu.png" alt="Sepatu" class="bottom-30 w-100 h-100 rounded-full bg-yellow-400 md:justify-self-end md:self-start mx-auto md:mx-0">
         </div>
     </section>
 
@@ -135,36 +132,34 @@
  <section id="Gallery" class="bg-white text-gray-800 py-20 px-10">
   <h2 class="text-3xl font-bold mb-10 text-center">Galeri Before & After</h2>
 
-  <!-- Container utama tengah -->
   <div class="flex flex-col items-center gap-8">
-    
     <div class="flex flex-col md:flex-row justify-center gap-6">
       <div class="text-center">
-        <img src="Before1.jpg" alt="Before 1" class="max-w-xs w-full h-auto rounded-lg mb-2 mx-auto">
+        <img src="Gambar/Before1.jpg" alt="Before 1" class="max-w-xs w-full h-auto rounded-lg mb-2 mx-auto">
         <p>Before</p>
       </div>
       <div class="text-center">
-        <img src="After1.jpg" alt="After 1" class="max-w-xs w-full h-auto rounded-lg mb-2 mx-auto">
+        <img src="Gambar/After1.jpg" alt="After 1" class="max-w-xs w-full h-auto rounded-lg mb-2 mx-auto">
         <p>After</p>
       </div>
     </div>
     <div class="flex flex-col md:flex-row justify-center gap-6">
       <div class="text-center">
-        <img src="Before2.jpg" alt="Before 2" class="max-w-xs w-full h-auto rounded-lg mb-2 mx-auto">
+        <img src="Gambar/Before2.jpg" alt="Before 2" class="max-w-xs w-full h-auto rounded-lg mb-2 mx-auto">
         <p>Before</p>
       </div>
       <div class="text-center">
-        <img src="After2.jpg" alt="After 2" class="max-w-xs w-full h-auto rounded-lg mb-2 mx-auto">
+        <img src="Gambar/After2.jpg" alt="After 2" class="max-w-xs w-full h-auto rounded-lg mb-2 mx-auto">
         <p>After</p>
       </div>
     </div>
     <div class="flex flex-col md:flex-row justify-center gap-6">
       <div class="text-center">
-        <img src="Before3.jpg" alt="Before 2" class="max-w-xs w-full h-auto rounded-lg mb-2 mx-auto">
+        <img src="Gambar/Before3.jpg" alt="Before 2" class="max-w-xs w-full h-auto rounded-lg mb-2 mx-auto">
         <p>Before</p>
       </div>
       <div class="text-center">
-        <img src="After3.jpg" alt="After 2" class="max-w-xs w-full h-auto rounded-lg mb-2 mx-auto">
+        <img src="Gambar/After3.jpg" alt="After 2" class="max-w-xs w-full h-auto rounded-lg mb-2 mx-auto">
         <p>After</p>
       </div>
     </div>
@@ -199,7 +194,7 @@
 
 
 <!-- Contact Me Section -->
-<section class="bg-white text-gray-800 py-20 px-10" id="contact">
+<section id="Contact" class="bg-white text-gray-800 py-20 px-10">
   <h2 class="text-3xl font-bold mb-10 text-center">Contact <span class="text-emerald-600">Me</span></h2>
   <div class="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
     
@@ -220,7 +215,7 @@
     </div>
 
     <!-- Google Maps -->
-    <iframe 
+    <iframe id="Maps"
       src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3957.5199224346643!2d112.7531303!3d-7.2953304999999995!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dd7fb86546f5141%3A0xdd7908d1c51de6a1!2sLight%20Service%20%26%20Space!5e0!3m2!1sen!2sid!4v1747744325456!5m2!1sen!2sid" 
       width="100%" 
       height="350" 
