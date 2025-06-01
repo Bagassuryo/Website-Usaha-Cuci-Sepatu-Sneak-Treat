@@ -13,11 +13,7 @@
   <div class="mx-auto flex h-16 max-w-screen-xl items-center gap-8 px-4 sm:px-6 lg:px-8">
     <a class="block text-teal-600 dark:text-teal-300" href="#">
       <span class="sr-only">Home</span>
-<<<<<<< HEAD
-      <img src="gambar/slide1.png" alt="Logo" class="h-12 rounded-full" viewBox="0 0 28 24" fill="none"> </img>
-=======
       <img src="Gambar/Logo.jpg" alt="Logo" class="h-12 rounded-full" viewBox="0 0 28 24" fill="none"> </img>
->>>>>>> 94ed0b81089463696e1fa99c2633b6ab6b02ad6d
     </a>
 
     <div class="flex flex-1 items-center justify-end md:justify-between">
