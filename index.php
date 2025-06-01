@@ -13,7 +13,7 @@
   <div class="mx-auto flex h-16 max-w-screen-xl items-center gap-8 px-4 sm:px-6 lg:px-8">
     <a class="block text-teal-600 dark:text-teal-300" href="#">
       <span class="sr-only">Home</span>
-      <img src="https://media.discordapp.net/attachments/1376191043225124956/1376191332669722706/Logo.jpg?ex=68346d8e&is=68331c0e&hm=da45d2a0c7de109bde1938cf38feb85c6678293a5bb053a00820d042c2a4eb79&=&format=webp&width=989&height=989" alt="Logo" class="h-12 rounded-full" viewBox="0 0 28 24" fill="none"> </img>
+      <img src="gambar/slide1.png" alt="Logo" class="h-12 rounded-full" viewBox="0 0 28 24" fill="none"> </img>
     </a>
 
     <div class="flex flex-1 items-center justify-end md:justify-between">
