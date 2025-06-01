@@ -9,172 +9,288 @@ if (!isset($_SESSION['idAkun'])) {
 
 $idAkun = $_SESSION['idAkun'];
 
-// Ambil idCustomer dari akun
-$queryCustomer = "SELECT Customer_idCustomer FROM akun WHERE idAkun = ?";
-$stmt1 = $conn->prepare($queryCustomer);
-$stmt1->bind_param("i", $idAkun);
-$stmt1->execute();
-$resultCustomer = $stmt1->get_result();
+$stmt = $conn->prepare("SELECT Customer_idCustomer FROM akun WHERE idAkun = ?");
+$stmt->bind_param("i", $idAkun);
+$stmt->execute();
+$res = $stmt->get_result();
 
-if ($resultCustomer->num_rows === 0) {
+if ($res->num_rows === 0) {
     echo "Data akun tidak ditemukan.";
-    $stmt1->close();
+    $stmt->close();
     $conn->close();
     exit();
 }
 
-$rowCustomer = $resultCustomer->fetch_assoc();
-$idCustomer = $rowCustomer['Customer_idCustomer'];
-$stmt1->close();
+$row = $res->fetch_assoc();
+$idCustomer = $row['Customer_idCustomer'];
+$stmt->close();
 
-// Ambil daftar pesanan dan status pembayaran
 $queryPesanan = "
-    SELECT p.*, pb.Status_Pembayaran, pb.Metode_Pembayaran
+    SELECT p.*, pb.Status_Pembayaran, pb.Metode_Pembayaran, c.Nama as Nama_Customer
     FROM pesanan p 
     LEFT JOIN pembayaran pb ON p.idPesanan = pb.Pesanan_idPesanan
-    WHERE p.Customer_idCustomer = ? 
+    LEFT JOIN customer c ON p.Customer_idCustomer = c.idCustomer
+    WHERE p.Customer_idCustomer = ?
     ORDER BY p.Tanggal_Pesanan DESC
 ";
+
 $stmt2 = $conn->prepare($queryPesanan);
 $stmt2->bind_param("i", $idCustomer);
 $stmt2->execute();
 $resultPesanan = $stmt2->get_result();
+
 ?>
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
-    <meta charset="UTF-8">
-    <title>Daftar Pesanan</title>
+    <meta charset="UTF-8" />
+    <title>Lihat Pesanan</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+
     <style>
-        /* Styles tetap sama seperti sebelumnya... */
         body {
             font-family: Arial, sans-serif;
             margin: 20px;
             background-color: #f5f5f5;
         }
+
         .container {
             max-width: 1200px;
             margin: 0 auto;
             background: white;
             padding: 20px;
             border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
+
         table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
         }
-        table, th, td {
+
+        table,
+        th,
+        td {
             border: 1px solid #ddd;
         }
-        th, td {
+
+        th,
+        td {
             padding: 12px;
             text-align: left;
         }
+
         th {
             background-color: #f8f9fa;
             font-weight: bold;
         }
+
         h2 {
             margin-top: 0;
             text-align: center;
             color: #333;
         }
+
+        .status-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            max-width: 150px;
+        }
+
         .status {
             padding: 4px 8px;
             border-radius: 4px;
             font-size: 12px;
             font-weight: bold;
             display: inline-block;
+            width: fit-content;
+            color: #fff;
         }
-        .status-menunggu { background-color: #fff3cd; color: #856404; }
-        .status-diproses { background-color: #cce5ff; color: #0056b3; }
-        .status-selesai { background-color: #d4edda; color: #155724; }
-        .status-dibatalkan { background-color: #f8d7da; color: #721c24; }
-        .status-belum-bayar { background-color: #f8d7da; color: #721c24; }
-        .status-lunas { background-color: #d4edda; color: #155724; }
-        .status-gagal { background-color: #f8d7da; color: #721c24; }
+
+        /* Status Pesanan */
+        .status-menunggu {
+            background-color: #6c757d;
+        }
+
+        .status-diproses {
+            background-color: #ffc107;
+            color: #212529;
+        }
+
+        .status-selesai {
+            background-color: #28a745;
+        }
+
+        .status-dibatalkan {
+            background-color: #dc3545;
+        }
+
+        /* Status Pembayaran */
+        .payment-menunggu {
+            background-color: #dc3545;
+        }
+
+        .payment-lunas {
+            background-color: #28a745;
+        }
+
+        .payment-gagal {
+            background-color: #6c757d;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            border-radius: 4px;
+            background-color: #ddd;
+            margin-top: 6px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            transition: width 1s ease-in-out;
+        }
+
+        .fill-menunggu {
+            background-color: #6c757d;
+            width: 25%;
+        }
+
+        .fill-diproses {
+            background-color: #ffc107;
+            width: 50%;
+        }
+
+        .fill-selesai {
+            background-color: #28a745;
+            width: 100%;
+        }
+
+        .fill-dibatalkan {
+            background-color: #dc3545;
+            width: 0%;
+        }
+
         .no-data {
             text-align: center;
             padding: 40px;
             color: #666;
         }
-        .detail-btn {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 12px;
-        }
-        .detail-btn:hover {
-            background-color: #0056b3;
+
+        tr:hover {
+            background-color: #f8f9fa;
         }
     </style>
 </head>
-<body>
-<div class="container">
-    <h2>Daftar Pesanan Anda</h2>
 
-    <?php if ($resultPesanan->num_rows > 0): ?>
-    <table>
-        <thead>
-            <tr>
-                <th>ID Pesanan</th>
-                <th>Tanggal</th>
-                <th>Status Pesanan</th>
-                <th>Status Pembayaran</th>
-                <th>Metode Pembayaran</th>
-                <th>Total Harga</th>
-                <th>Catatan</th>
-                <th>Aksi</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php while ($row = $resultPesanan->fetch_assoc()): 
-                $statusPesanan = strtolower($row['Status_Pesanan']);
-                $statusPembayaran = strtolower($row['Status_Pembayaran'] ?? 'belum-bayar');
-            ?>
-            <tr>
-                <td>#<?= htmlspecialchars($row['idPesanan']); ?></td>
-                <td><?= $row['Tanggal_Pesanan'] ? date('d/m/Y H:i', strtotime($row['Tanggal_Pesanan'])) : '-'; ?></td>
-                <td>
-                    <span class="status status-<?= $statusPesanan ?>">
-                        <?= htmlspecialchars($row['Status_Pesanan']); ?>
-                    </span>
-                </td>
-                <td>
-                    <span class="status status-<?= $statusPembayaran ?>">
-                        <?= $row['Status_Pembayaran'] ? htmlspecialchars($row['Status_Pembayaran']) : 'Belum Bayar'; ?>
-                    </span>
-                </td>
-                <td><?= $row['Metode_Pembayaran'] ? htmlspecialchars($row['Metode_Pembayaran']) : '-'; ?></td>
-                <td>Rp<?= is_numeric($row['Total_Harga']) ? number_format($row['Total_Harga'], 0, ',', '.') : '-'; ?></td>
-                <td><?= !empty($row['Catatan_Khusus']) ? htmlspecialchars($row['Catatan_Khusus']) : '-'; ?></td>
-                <td>
-                    <button class="detail-btn" onclick="lihatDetail(<?= $row['idPesanan']; ?>)">Detail</button>
-                </td>
-            </tr>
-            <?php endwhile; ?>
-        </tbody>
-    </table>
-    <?php else: ?>
-        <div class="no-data">
-            <p>Belum ada pesanan.</p>
+<body class="bg-gray-100 font-sans">
+    <header class="bg-emerald-800 shadow-lg">
+        <div class="mx-auto flex h-16 max-w-screen-xl items-center justify-between px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center gap-4">
+                <img src="Logo.jpg" alt="Admin Logo" class="h-12 rounded-full">
+                <span class="text-white text-xl font-bold">Lihat Pesanan</span>
+            </div>
+
+            <div class="flex items-center gap-6 text-white">
+                <a class="block rounded-md bg-red-500 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-red-600" href="logout.php"> Logout </a>
+            </div>
         </div>
-    <?php endif; ?>
-</div>
+    </header>
+    <div class="container">
+        <h2>Lihat Pesanan Anda</h2>
 
-<script>
-function lihatDetail(idPesanan) {
-    window.location.href = 'detail_pesanan.php?id=' + idPesanan;
-}
-</script>
+        <?php if ($resultPesanan && $resultPesanan->num_rows > 0): ?>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID Pesanan</th>
+                        <th>Tanggal</th>
+                        <th>Status Pesanan</th>
+                        <th>Status Pembayaran</th>
+                        <th>Metode Pembayaran</th>
+                        <th>Total Harga</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php while ($row = $resultPesanan->fetch_assoc()):
+                        $statusPesanan = strtolower($row['Status_Pesanan'] ?? 'menunggu');
+                        $statusPesananClass = '';
+                        $statusPesananDisplay = '';
+
+                        switch ($statusPesanan) {
+                            case 'menunggu':
+                                $statusPesananDisplay = 'Belum Dibayar';
+                                $statusPesananClass = 'menunggu';
+                                break;
+                            case 'diproses':
+                                $statusPesananDisplay = 'Proses Cuci';
+                                $statusPesananClass = 'diproses';
+                                break;
+                            case 'selesai':
+                                $statusPesananDisplay = 'Selesai';
+                                $statusPesananClass = 'selesai';
+                                break;
+                            default:
+                                $statusPesananDisplay = 'Belum Dibayar';
+                                $statusPesananClass = 'menunggu';
+                        }
+
+                        $statusPembayaran = strtolower($row['Status_Pembayaran'] ?? 'menunggu');
+                        $statusPembayaranClass = '';
+                        $statusPembayaranDisplay = '';
+
+                        switch ($statusPembayaran) {
+                            case 'lunas':
+                                $statusPembayaranDisplay = 'Lunas';
+                                $statusPembayaranClass = 'payment-lunas';
+                                break;
+                            case 'gagal':
+                                $statusPembayaranDisplay = 'Gagal';
+                                $statusPembayaranClass = 'payment-gagal';
+                                break;
+                            case 'menunggu':
+                            default:
+                                $statusPembayaranDisplay = 'Belum Bayar';
+                                $statusPembayaranClass = 'payment-menunggu';
+                        }
+                    ?>
+                        <tr>
+                            <td><?= htmlspecialchars($row['idPesanan']); ?></td>
+                            <td><?= $row['Tanggal_Pesanan'] ? date('d/m/Y H:i', strtotime($row['Tanggal_Pesanan'])) : '-'; ?></td>
+                            <td>
+                                <div class="status-wrapper">
+                                    <span class="status status-<?= $statusPesananClass ?>">
+                                        <?= $statusPesananDisplay; ?>
+                                    </span>
+                                    <div class="progress-bar">
+                                        <div class="progress-fill fill-<?= $statusPesananClass ?>"></div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <span class="status <?= $statusPembayaranClass ?>">
+                                    <?= $statusPembayaranDisplay ?>
+                                </span>
+                            </td>
+                            <td><?= $row['Metode_Pembayaran'] ? htmlspecialchars($row['Metode_Pembayaran']) : '-'; ?></td>
+                            <td>Rp<?= is_numeric($row['Total_Harga']) ? number_format($row['Total_Harga'], 0, ',', '.') : '-'; ?></td>
+                        </tr>
+                    <?php endwhile; ?>
+                </tbody>
+            </table>
+        <?php else: ?>
+            <div class="no-data">
+                <p>Belum ada pesanan.</p>
+            </div>
+        <?php endif; ?>
+    </div>
 </body>
-</html>
 
+</html>
 <?php
 $stmt2->close();
 $conn->close();
