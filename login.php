@@ -10,7 +10,7 @@
 <body>
 <div class="container">
   <div class="form-section">
-    <img src="https://media.discordapp.net/attachments/464434558792630282/1376161137321578606/logo_sneakntreat.jpg?ex=6834516e&is=6832ffee&hm=e38c92afb660e7532219c3b99aa0c54efd6a31bfc28835be6ea1ac417b466f0a&=&format=webp&width=859&height=859" class="logo" alt="InsideBox" />
+    <img src="https://media.discordapp.net/attachments/464434558792630282/1376161137321578606/logo_sneakntreat.jpg?ex=6834516e&is=6832ffee&hm=e38c92afb660e7532219c3b99aa0c54efd6a31bfc28835be6ea1ac417b466f0a&=&format=webp&width=859&height=859" class="logo" alt="Sneak&Treat" />
     <h3>Welcome back</h3>
     <h2>Sign In to Sneak&Treat</h2>
 
