@@ -13,7 +13,11 @@
   <div class="mx-auto flex h-16 max-w-screen-xl items-center gap-8 px-4 sm:px-6 lg:px-8">
     <a class="block text-teal-600 dark:text-teal-300" href="#">
       <span class="sr-only">Home</span>
+<<<<<<< HEAD
       <img src="gambar/slide1.png" alt="Logo" class="h-12 rounded-full" viewBox="0 0 28 24" fill="none"> </img>
+=======
+      <img src="Gambar/Logo.jpg" alt="Logo" class="h-12 rounded-full" viewBox="0 0 28 24" fill="none"> </img>
+>>>>>>> 94ed0b81089463696e1fa99c2633b6ab6b02ad6d
     </a>
 
     <div class="flex flex-1 items-center justify-end md:justify-between">
@@ -65,11 +69,11 @@
                 <h2 class="text-white text-4xl md:text-5xl font-bold max-w-xl mb-6 leading-tight">Solusi Cuci Sepatu Profesional - Cepat, Bersih, Aman.</h2>
 
                 <div class="mt-4 flex gap-4 sm:mt-6">
-                    <a class="inline-block rounded border border-yellow-400 bg-yellow-400 px-5 py-3 font-medium text-black shadow-sm transition-colors hover:bg-yellow-300" href="#"> Pesan Sekarang </a>
+                    <a class="inline-block rounded border border-yellow-400 bg-yellow-400 px-5 py-3 font-medium text-black shadow-sm transition-colors hover:bg-yellow-300" href="pemesanan.php"> Pesan Sekarang </a>
                     <a class="inline-block rounded border border-gray-200 px-5 py-3 font-medium text-white shadow-sm transition-colors hover:bg-gray-50 hover:text-black" href="#layanan"> Layanan Kami </a>
                 </div>
             </div>
-            <img src="https://media.discordapp.net/attachments/1376191043225124956/1376191360960561162/Sepatuu.png?ex=68346d94&is=68331c14&hm=f5173136a4a8a73dcca0d1212e8a3a65ec10eb657e54402817884a9dd0de03f5&=&format=webp&quality=lossless&width=989&height=989" alt="Sepatu" class="bottom-30 w-100 h-100 rounded-full bg-yellow-400 md:justify-self-end md:self-start mx-auto md:mx-0">
+            <img src="Gambar/Sepatuu.png" alt="Sepatu" class="bottom-30 w-100 h-100 rounded-full bg-yellow-400 md:justify-self-end md:self-start mx-auto md:mx-0">
         </div>
     </section>
 
@@ -140,31 +144,31 @@
     
     <div class="flex flex-col md:flex-row justify-center gap-6">
       <div class="text-center">
-        <img src="https://media.discordapp.net/attachments/1376191043225124956/1376191388915335271/Before1.jpg?ex=68346d9b&is=68331c1b&hm=61801e6a37b151d90a8df9789fc42ee8f261eb27ddb1c1c4ecbf51c978681511&=&format=webp&width=989&height=989" alt="Before 1" class="max-w-xs w-full h-auto rounded-lg mb-2 mx-auto">
+        <img src="Gambar/Before1.jpg" alt="Before 1" class="max-w-xs w-full h-auto rounded-lg mb-2 mx-auto">
         <p>Before</p>
       </div>
       <div class="text-center">
-        <img src="https://media.discordapp.net/attachments/1376191043225124956/1376191406795653150/After1.jpg?ex=68346d9f&is=68331c1f&hm=f4b58012081945fac9f443c7679620b6f04759e13143ea16b89146d2a95eff0b&=&format=webp&width=989&height=989" alt="After 1" class="max-w-xs w-full h-auto rounded-lg mb-2 mx-auto">
+        <img src="Gambar/After1.jpg" alt="After 1" class="max-w-xs w-full h-auto rounded-lg mb-2 mx-auto">
         <p>After</p>
       </div>
     </div>
     <div class="flex flex-col md:flex-row justify-center gap-6">
       <div class="text-center">
-        <img src="https://media.discordapp.net/attachments/1376191043225124956/1376191424281837668/Before2.jpg?ex=68346da3&is=68331c23&hm=a33c43515a05681142a0e0e90ff195041ce3de8db7fc8ca4cc51dc72a968f9b3&=&format=webp&width=989&height=989" alt="Before 2" class="max-w-xs w-full h-auto rounded-lg mb-2 mx-auto">
+        <img src="Gambar/Before2.jpg" alt="Before 2" class="max-w-xs w-full h-auto rounded-lg mb-2 mx-auto">
         <p>Before</p>
       </div>
       <div class="text-center">
-        <img src="https://media.discordapp.net/attachments/1376191043225124956/1376191443173118124/After2.jpg?ex=68346da8&is=68331c28&hm=4c9c05c518186589be4690d7d4567c48667fb7a7f55474766e5c67b192d15ca2&=&format=webp&width=438&height=438" alt="After 2" class="max-w-xs w-full h-auto rounded-lg mb-2 mx-auto">
+        <img src="Gambar/After2.jpg" alt="After 2" class="max-w-xs w-full h-auto rounded-lg mb-2 mx-auto">
         <p>After</p>
       </div>
     </div>
     <div class="flex flex-col md:flex-row justify-center gap-6">
       <div class="text-center">
-        <img src="https://media.discordapp.net/attachments/1376191043225124956/1376191477817933967/Before3.jpg?ex=68346db0&is=68331c30&hm=f04c0ce8abc2f9f267c2fa66efe3af78ef7519cb9b6e3c6b38add19cca2dd907&=&format=webp&width=989&height=989" alt="Before 2" class="max-w-xs w-full h-auto rounded-lg mb-2 mx-auto">
+        <img src="Gambar/Before3.jpg" alt="Before 2" class="max-w-xs w-full h-auto rounded-lg mb-2 mx-auto">
         <p>Before</p>
       </div>
       <div class="text-center">
-        <img src="https://media.discordapp.net/attachments/1376191043225124956/1376191494859395112/After3.jpg?ex=68346db4&is=68331c34&hm=d678778e575d443d27ae39e3aa50488a6f3c2ef592a96bbe75d950a588ed338b&=&format=webp&width=989&height=989" alt="After 2" class="max-w-xs w-full h-auto rounded-lg mb-2 mx-auto">
+        <img src="Gambar/After3.jpg" alt="After 2" class="max-w-xs w-full h-auto rounded-lg mb-2 mx-auto">
         <p>After</p>
       </div>
     </div>
