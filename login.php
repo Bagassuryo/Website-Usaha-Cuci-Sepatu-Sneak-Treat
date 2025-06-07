@@ -20,14 +20,13 @@
     <i class="fas fa-envelope input-icon"></i>
     <input type="email" name="email" placeholder="E-mail" required />
   </div>
-
   <div class="input-group">
     <i class="fas fa-lock input-icon"></i>
     <input type="password" name="password" placeholder="Password" required />
   </div>
-
   <button type="submit" class="btn">Sign In</button>
 </form>
+
 
 
 <p class="or-text">or sign in with</p>

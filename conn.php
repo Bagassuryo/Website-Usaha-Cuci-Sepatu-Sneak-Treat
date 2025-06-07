@@ -1,74 +1,50 @@
 <?php
 session_start();
 
-// Koneksi ke database
-$conn = new mysqli("localhost", "root", "", "db_sepatu");
-if ($conn->connect_error) {
-    die("Koneksi gagal: " . $conn->connect_error);
+$host = "localhost"; // sesuaikan dengan host
+$user = "root";      // sesuaikan dengan user database
+$pass = "";          // sesuaikan dengan password database
+$db   = "db_sepatu"; // sesuaikan dengan nama database kamu
+
+$conn = mysqli_connect($host, $user, $pass, $db);
+if (!$conn) {
+    die("Koneksi gagal: " . mysqli_connect_error());
 }
 
-// Cek apakah form login atau register
-if (isset($_POST['action'])) {
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $action = $_POST['action'];
 
-    if ($action === 'register') {
-        // Register
-        $name = $_POST['nama'];
-        $email = $_POST['email'];
-        $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+    $email = mysqli_real_escape_string($conn, $_POST['email']);
+    $password = mysqli_real_escape_string($conn, $_POST['password']);
 
-        // Cek email sudah terdaftar
-        $check = $conn->prepare("SELECT id FROM users WHERE email = ?");
-        $check->bind_param("s", $email);
-        $check->execute();
-        $check->store_result();
-
-        if ($check->num_rows > 0) {
-            header("Location: register.php?error=exists");
-            exit();
-        }
-
-        $sql = "INSERT INTO users (name, email, password) VALUES (?, ?, ?)";
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param("sss", $name, $email, $password);
-
-        if ($stmt->execute()) {
-            header("Location: login.php?success=registered");
-            exit();
+    if ($action === "login") {
+        $query = mysqli_query($conn, "SELECT * FROM users WHERE email='$email' AND password='$password'");
+        if (mysqli_num_rows($query) > 0) {
+            $data = mysqli_fetch_assoc($query);
+            $_SESSION['name'] = $data['name']; // konsisten pakai 'name'
+            header("Location: index.php");
+            exit;
         } else {
-            header("Location: register.php?error=failed");
-            exit();
+            echo "<script>alert('Login gagal! Email atau password salah.'); window.location='login.php';</script>";
         }
-    }
 
-    if ($action === 'login') {
-        // Login
-        $email = $_POST['email'];
-        $password = $_POST['password'];
+    } elseif ($action === "register") {
+        $name = mysqli_real_escape_string($conn, $_POST['nama']);
 
-        $sql = "SELECT * FROM users WHERE email = ?";
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param("s", $email);
-        $stmt->execute();
-        $result = $stmt->get_result();
-
-        if ($result->num_rows === 1) {
-            $user = $result->fetch_assoc();
-            if (password_verify($password, $user['password'])) {
-                $_SESSION['user_id'] = $user['id'];
-                $_SESSION['user_name'] = $user['name'];
+        // Cek apakah email sudah terdaftar
+        $check = mysqli_query($conn, "SELECT * FROM users WHERE email='$email'");
+        if (mysqli_num_rows($check) > 0) {
+            echo "<script>alert('Email sudah terdaftar!'); window.location='register.php';</script>";
+        } else {
+            $insert = mysqli_query($conn, "INSERT INTO users (name, email, password) VALUES ('$name', '$email', '$password')");
+            if ($insert) {
+                $_SESSION['name'] = $name; // konsisten pakai 'name'
                 header("Location: index.php");
-                exit();
+                exit;
             } else {
-                header("Location: login.php?error=password");
-                exit();
+                echo "<script>alert('Registrasi gagal!'); window.location='register.php';</script>";
             }
-        } else {
-            header("Location: login.php?error=email");
-            exit();
         }
     }
-} else {
-    header("Location: login.php");
-    exit();
 }
+?>

@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -13,29 +16,31 @@
   <div class="mx-auto flex h-16 max-w-screen-xl items-center gap-8 px-4 sm:px-6 lg:px-8">
     <a class="block text-teal-600 dark:text-teal-300" href="#">
       <span class="sr-only">Home</span>
-      <img src="Gambar/Logo.jpg" alt="Logo" class="h-12 rounded-full" viewBox="0 0 28 24" fill="none"> </img>
+      <img src="Gambar/Logo.jpg" alt="Logo" class="h-12 rounded-full">
     </a>
 
     <div class="flex flex-1 items-center justify-end md:justify-between">
       <nav aria-label="Global" class="hidden md:block">
         <ul class="flex items-center gap-6 text-sm">
-          <li> <a class="text-white transition hover:text-yellow-400" href="#About"> About </a> </li>
-
-          <li> <a class="text-white transition hover:text-yellow-400" href="#Gallery"> Gallery </a> </li>
-
-          <li> <a class="text-white transition hover:text-yellow-400" href="#Maps"> Maps </a> </li>
-
-          <li> <a class="text-white transition hover:text-yellow-400" href="#Contact"> Contact </a> </li>
-
+          <li><a class="text-white transition hover:text-yellow-400" href="#About">About</a></li>
+          <li><a class="text-white transition hover:text-yellow-400" href="#Gallery">Gallery</a></li>
+          <li><a class="text-white transition hover:text-yellow-400" href="#Maps">Maps</a></li>
+          <li><a class="text-white transition hover:text-yellow-400" href="#Contact">Contact</a></li>
         </ul>
       </nav>
 
-      <div class="flex items-center gap-4">
-        <div class="sm:flex sm:gap-4">
-          <a class="block rounded-md bg-yellow-400 px-5 py-2.5 text-sm font-medium text-black transition hover:bg-yellow-300" href="login.php"> Login </a>
+      <?php if (isset($_SESSION['name'])): ?>
+  <p class="text-white text-4xl md:text-5xl font-bold leading-tight">
+    Selamat datang, <?= htmlspecialchars($_SESSION['name']) ?>!
+  </p>
+  <a href="logout.php" class="ml-4 block rounded-md bg-red-500 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-red-400">Logout</a>
+<?php else: ?>
+  <div class="sm:flex sm:gap-4">
+    <a class="block rounded-md bg-yellow-400 px-5 py-2.5 text-sm font-medium text-black transition hover:bg-yellow-300" href="login.php">Login</a>
+    <a class="hidden rounded-md bg-white px-5 py-2.5 text-sm font-medium text-black transition hover:bg-black hover:text-white sm:block" href="register.php">Register</a>
+  </div>
+<?php endif; ?>
 
-          <a class="hidden rounded-md bg-white px-5 py-2.5 text-sm font-medium text-black transition hover:bg-black transition hover:text-white sm:block" href="register.php"> Register </a>
-        </div>
 
         <button
           class="block rounded-sm bg-gray-100 p-2.5 text-gray-600 transition hover:text-gray-600/75 md:hidden dark:bg-gray-800 dark:text-white dark:hover:text-white/75"
@@ -59,19 +64,19 @@
 
   <!-- Hero Section -->
   <section class="bg-emerald-800 lg:grid lg:h-screen lg:place-content-center">
-        <div class="mx-auto w-screen max-w-screen-xl px-4 py-16 sm:px-6 sm:py-24 md:grid md:grid-cols-2 md:items-center md:gap-4 lg:px-8 lg:py-32">
-            <div class="max-w-prose text-left">
-                <h1 class="text-4xl font-bold mb-6 text-yellow-300 sm:text-5xl"> Sneak & Treat </h1>
-                <h2 class="text-white text-4xl md:text-5xl font-bold max-w-xl mb-6 leading-tight">Solusi Cuci Sepatu Profesional - Cepat, Bersih, Aman.</h2>
+    <div class="mx-auto w-screen max-w-screen-xl px-4 py-16 sm:px-6 sm:py-24 md:grid md:grid-cols-2 md:items-center md:gap-4 lg:px-8 lg:py-32">
+      <div class="max-w-prose text-left">
+        <h1 class="text-4xl font-bold mb-6 text-yellow-300 sm:text-5xl">Sneak & Treat</h1>
+        <h2 class="text-white text-4xl md:text-5xl font-bold max-w-xl mb-6 leading-tight">Solusi Cuci Sepatu Profesional - Cepat, Bersih, Aman.</h2>
 
-                <div class="mt-4 flex gap-4 sm:mt-6">
-                    <a class="inline-block rounded border border-yellow-400 bg-yellow-400 px-5 py-3 font-medium text-black shadow-sm transition-colors hover:bg-yellow-300" href="pemesanan.php"> Pesan Sekarang </a>
-                    <a class="inline-block rounded border border-gray-200 px-5 py-3 font-medium text-white shadow-sm transition-colors hover:bg-gray-50 hover:text-black" href="#layanan"> Layanan Kami </a>
-                </div>
-            </div>
-            <img src="Gambar/Sepatuu.png" alt="Sepatu" class="bottom-30 w-100 h-100 rounded-full bg-yellow-400 md:justify-self-end md:self-start mx-auto md:mx-0">
+        <div class="mt-4 flex gap-4 sm:mt-6">
+          <a class="inline-block rounded border border-yellow-400 bg-yellow-400 px-5 py-3 font-medium text-black shadow-sm transition-colors hover:bg-yellow-300" href="pemesanan.php">Pesan Sekarang</a>
+          <a class="inline-block rounded border border-gray-200 px-5 py-3 font-medium text-white shadow-sm transition-colors hover:bg-gray-50 hover:text-black" href="#layanan">Layanan Kami</a>
         </div>
-    </section>
+      </div>
+      <img src="Gambar/Sepatuu.png" alt="Sepatu" class="bottom-30 w-100 h-100 rounded-full bg-yellow-400 md:justify-self-end md:self-start mx-auto md:mx-0">
+    </div>
+  </section>
 
   <!-- Tentang Kami -->
   <section class="bg-white text-gray-800 py-20 px-10">
@@ -134,10 +139,7 @@
   <!-- Galeri Before After -->
  <section id="Gallery" class="bg-white text-gray-800 py-20 px-10">
   <h2 class="text-3xl font-bold mb-10 text-center">Galeri Before & After</h2>
-
-  <!-- Container utama tengah -->
   <div class="flex flex-col items-center gap-8">
-    
     <div class="flex flex-col md:flex-row justify-center gap-6">
       <div class="text-center">
         <img src="Gambar/Before1.jpg" alt="Before 1" class="max-w-xs w-full h-auto rounded-lg mb-2 mx-auto">
@@ -168,11 +170,8 @@
         <p>After</p>
       </div>
     </div>
-
   </div>
 </section>
-
-
 
   <!-- Testimoni Pelanggan -->
  <section class="bg-emerald-800 text-white py-20 px-10">
@@ -197,12 +196,10 @@
   </div>
 </section>
 
-
 <!-- Contact Me Section -->
 <section class="bg-white text-gray-800 py-20 px-10" id="contact">
   <h2 class="text-3xl font-bold mb-10 text-center">Contact <span class="text-emerald-600">Me</span></h2>
   <div class="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
-    
     <!-- Info Kontak -->
     <div class="space-y-6">
       <div>
@@ -218,7 +215,6 @@
         <p>0813-1212-0433</p>
       </div>
     </div>
-
     <!-- Google Maps -->
     <iframe 
       src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3957.5199224346643!2d112.7531303!3d-7.2953304999999995!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dd7fb86546f5141%3A0xdd7908d1c51de6a1!2sLight%20Service%20%26%20Space!5e0!3m2!1sen!2sid!4v1747744325456!5m2!1sen!2sid" 
@@ -231,7 +227,6 @@
     </iframe>
   </div>
 </section>
-
 
   <!-- Footer -->
   <footer class="bg-emerald-800 text-white py-10 text-center">
