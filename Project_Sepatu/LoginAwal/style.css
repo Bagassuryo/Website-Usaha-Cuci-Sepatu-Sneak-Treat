@@ -1,0 +1,165 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body, html {
+  height: 100%;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.container {
+  display: flex;
+  height: 100vh;
+}
+
+/* Form Section 30% */
+.form-section {
+  width: 40%; /* <- Ubah ke 30% sesuai permintaan awal */
+  padding: 60px 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: #FFF176;
+}
+
+.logo {
+  width: 150px;
+  margin-bottom: 30px;
+  margin-left: 185px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+}
+
+h2 {
+  font-size: 24px;
+  font-weight: bold;
+  margin: 8px 0 20px;
+  margin-left: 50px;
+}
+
+h3 {
+  font-size: 14px;
+  color: #666;
+  margin-left: 50px;
+}
+
+.input-group {
+  position: relative;
+  margin-bottom: 15px;
+  justify-content: center;
+  align-items: center;
+}
+
+.input-group input {
+  width: 80%;
+  padding: 12px 12px 12px 40px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  margin-left: 50px;
+  justify-content: center;
+  align-items: center;
+}
+
+.input-icon {
+  position: absolute;
+  top: 50%;
+  left: 12px;
+  transform: translateY(-50%);
+  color: #999;
+  font-size: 16px;
+  margin-left: 50px;
+}
+
+.btn {
+  padding: 12px;
+  width: 80%;
+  background-color: #009B7D;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  margin-top: 10px;
+  margin-left: 50px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.or-text {
+  text-align: center;
+  margin: 20px 0 10px;
+  color: #999;
+}
+
+.social-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.social-buttons i {
+  font-size: 20px;
+  padding: 12px;
+  background: #f7f7f7;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.social-buttons i:hover {
+  background: #e0e0e0;
+}
+
+.bottom-text {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 14px;
+}
+
+.bottom-text a {
+  color: #2d77ff;
+  text-decoration: none;
+}
+
+/* Slider Section 70% */
+.slider-section {
+  width: 60%; /* Sesuai permintaan: slider bagian kanan 70% */
+  overflow: hidden;
+  position: relative;
+}
+
+.slider {
+  position: relative;
+  height: 100%;
+}
+
+.slide {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+}
+
+.slide.active {
+  opacity: 1;
+}
+
+.error-message {
+  color: #ff3333;
+  margin-bottom: 15px;
+  text-align: center;
+  font-size: 14px;
+  padding: 10px;
+  background-color: #ffeeee;
+  border-radius: 5px;
+  border: 1px solid #ffcccc;
+}
