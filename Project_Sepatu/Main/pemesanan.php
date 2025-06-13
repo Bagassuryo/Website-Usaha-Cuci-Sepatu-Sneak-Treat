@@ -13,7 +13,7 @@ require_once 'db_config.php';
 // Inisialisasi variabel error
 $error = '';
 
-// Ganti query sebelumnya dengan ini:
+// Query untuk mendapatkan data user
 $stmt = $conn->prepare("SELECT c.IdCustomer, c.Nama, c.No_Telepon, a.Email_Akun, a.idAkun
                        FROM customer c
                        JOIN akun a ON c.IdCustomer = a.Customer_IdCustomer
@@ -38,14 +38,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $layanan = htmlspecialchars(trim($_POST["layanan"]));
     $tanggal = htmlspecialchars(trim($_POST["tanggal"]));
     $catatan = isset($_POST["catatan"]) ? htmlspecialchars(trim($_POST["catatan"])) : '';
+    $metode_pembayaran = isset($_POST["metode_pembayaran"]) ? htmlspecialchars(trim($_POST["metode_pembayaran"])) : '';
     
     // Validasi input
-    if (empty($jenis_sepatu) || empty($layanan) || empty($tanggal)) {
+    if (empty($jenis_sepatu) || empty($layanan) || empty($tanggal) || empty($metode_pembayaran)) {
         $error = "Semua field wajib diisi!";
     } elseif (strtotime($tanggal) < strtotime('today')) {
         $error = "Tanggal tidak boleh di masa lalu";
     } else {
-        // Dapatkan harga dari database berdasarkan layanan yang dipilih
+        // Mulai transaksi database
+        $conn->begin_transaction();
+        
         try {
             // Cari idLayanan berdasarkan nama layanan yang dipilih
             $stmt = $conn->prepare("SELECT idLayanan, Harga FROM layanan WHERE Nama_Layanan = ?");
@@ -61,7 +64,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $idLayanan = $layanan_data['idLayanan'];
             $total_harga = $layanan_data['Harga'];
             
-            // Simpan data ke tabel pesanan
+            // 1. Simpan data ke tabel pesanan (tanpa IdPembayaran dulu)
             $stmt = $conn->prepare("INSERT INTO pesanan (
                 idLayanan, 
                 Customer_IdCustomer, 
@@ -73,43 +76,81 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 Catatan_Khusus
                 ) VALUES (?, ?, NOW(), ?, 'Menunggu', ?, ?, ?)");
             
-           $stmt->bind_param(
+            $stmt->bind_param(
                 "issdss", 
                 $idLayanan,
-                $user_data['IdCustomer'], // Ini yang diperbaiki
+                $user_data['IdCustomer'],
                 $tanggal,
                 $total_harga,
                 $jenis_sepatu,
                 $catatan
             );
             
-          $stmt->execute();
-    
-            if ($stmt->affected_rows > 0) {
-                $id_pesanan = $conn->insert_id;
-                $_SESSION['data_pesanan'] = [
-                    'id_pesanan' => $id_pesanan,
-                    'nama' => $user_data['Nama'],
-                    'no_hp' => $user_data['No_Telepon'],
-                    'jenis_sepatu' => $jenis_sepatu,
-                    'layanan' => $layanan,
-                    'tanggal' => $tanggal,
-                    'total_harga' => $total_harga,
-                    'catatan' => $catatan
-                ];
-                
-                // Simpan data pesanan di session untuk halaman konfirmasi
-                $_SESSION['data_pesanan'] = $data_pesanan;
-                
-                // Redirect ke halaman konfirmasi
-                header("Location: Pemesanan.php");
-                exit;
-            } else {
+            $stmt->execute();
+            
+            if ($stmt->affected_rows === 0) {
                 throw new Exception("Gagal menyimpan pesanan");
             }
             
-            $stmt->close();
+            $id_pesanan = $conn->insert_id;
+            
+            // 2. Simpan data pembayaran
+            $stmt = $conn->prepare("INSERT INTO pembayaran (
+                Metode_Pembayaran,
+                Jumlah_Pembayaran,
+                Status_Pembayaran,
+                Pesanan_IdPesanan
+                ) VALUES (?, ?, 'Pending', ?)");
+            
+            $stmt->bind_param(
+                "sdi",
+                $metode_pembayaran,
+                $total_harga,
+                $id_pesanan
+            );
+            
+            $stmt->execute();
+            
+            if ($stmt->affected_rows === 0) {
+                throw new Exception("Gagal menyimpan data pembayaran");
+            }
+            
+            $id_pembayaran = $conn->insert_id;
+            
+            // 3. Update pesanan dengan IdPembayaran
+            $stmt = $conn->prepare("UPDATE pesanan SET IdPembayaran = ? WHERE idPesanan = ?");
+            $stmt->bind_param("ii", $id_pembayaran, $id_pesanan);
+            $stmt->execute();
+            
+            if ($stmt->affected_rows === 0) {
+                throw new Exception("Gagal mengupdate pesanan dengan data pembayaran");
+            }
+            
+            // Commit transaksi jika semua berhasil
+            $conn->commit();
+            
+            // Simpan data pesanan di session untuk halaman konfirmasi
+            $_SESSION['data_pesanan'] = [
+                'id_pesanan' => $id_pesanan,
+                'id_pembayaran' => $id_pembayaran,
+                'nama' => $user_data['Nama'],
+                'no_hp' => $user_data['No_Telepon'],
+                'jenis_sepatu' => $jenis_sepatu,
+                'layanan' => $layanan,
+                'tanggal' => $tanggal,
+                'total_harga' => $total_harga,
+                'catatan' => $catatan,
+                'metode_pembayaran' => $metode_pembayaran,
+                'status_pembayaran' => 'Pending'
+            ];
+            
+            // Redirect ke halaman konfirmasi
+            header("Location: pemesanan.php");
+            exit;
+            
         } catch (Exception $e) {
+            // Rollback transaksi jika ada error
+            $conn->rollback();
             $error = "Terjadi kesalahan: " . $e->getMessage();
         }
     }
@@ -318,6 +359,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 >
                 <p class="text-sm text-gray-500 mt-1">Pilih tanggal pengantaran sepatu</p>
               </div>
+              
+              <!-- Metode Pembayaran -->
+              <div class="mb-8">
+                  <label class="block text-lg font-medium mb-2">
+                      <i class="fas fa-credit-card text-emerald-600 mr-2"></i>Metode Pembayaran
+                  </label>
+                  <div class="relative">
+                      <select 
+                          name="metode_pembayaran" 
+                          required
+                          class="w-full p-4 border border-gray-300 rounded-lg form-input focus:border-yellow-400 focus:ring-2 focus:ring-yellow-200 appearance-none"
+                      >
+                          <option value="">-- Pilih Metode Pembayaran --</option>
+                          <option value="Transfer Bank" <?php echo (isset($_POST['metode_pembayaran']) && $_POST['metode_pembayaran'] == 'Transfer Bank') ? 'selected' : ''; ?>>Transfer Bank</option>
+                          <option value="E-Wallet" <?php echo (isset($_POST['metode_pembayaran']) && $_POST['metode_pembayaran'] == 'E-Wallet') ? 'selected' : ''; ?>>E-Wallet (Dana, OVO, etc)</option>
+                          <option value="Tunai" <?php echo (isset($_POST['metode_pembayaran']) && $_POST['metode_pembayaran'] == 'Tunai') ? 'selected' : ''; ?>>Tunai saat pengantaran</option>
+                      </select>
+                      <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                          <i class="fas fa-chevron-down"></i>
+                </div>
             </div>
             
             <!-- Catatan Khusus -->
