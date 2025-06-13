@@ -156,7 +156,8 @@ if (!isset($_SESSION['admin_logged_in'])) {
     header("Location: ../LoginAwal/login.php");
     exit();
 }
-// Koneksi Database
+
+// Database Connection
 $servername = "localhost";
 $username = "root";
 $password = "";
@@ -164,23 +165,12 @@ $dbname = "db_sepatu";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 
-// Cek Koneksi
+// Check Connection
 if ($conn->connect_error) {
     die("Koneksi gagal: " . $conn->connect_error);
 }
 
-// Hitung pelanggan aktif berdasarkan pesanan yang masih menunggu atau diproses
-$pelanggan_aktif = 0;
-$sql_pelanggan = "SELECT COUNT(DISTINCT Customer_idCustomer) AS total_aktif 
-                  FROM pesanan 
-                  WHERE status_pesanan IN ('menunggu', 'diproses');";
-$result_pelanggan = $conn->query($sql_pelanggan);
-
-if ($result_pelanggan && $row = $result_pelanggan->fetch_assoc()) {
-    $pelanggan_aktif = $row['total_aktif'];
-}
-
-// Hitung total pesanan
+// Calculate total orders
 $total_pesanan = 0;
 $sql = "SELECT COUNT(idPesanan) AS total_pesanan FROM pesanan";
 $result = $conn->query($sql);
@@ -188,7 +178,59 @@ if ($result && $row = $result->fetch_assoc()) {
     $total_pesanan = $row['total_pesanan'];
 }
 
-// Handle Tambah Layanan
+// Calculate active customers (waiting orders)
+$pelanggan_aktif = 0;
+$sql_pelanggan = "SELECT COUNT(DISTINCT p.Customer_idCustomer) AS total_aktif 
+                  FROM pesanan p
+                  JOIN customer c ON p.Customer_idCustomer = c.idCustomer
+                  WHERE p.status_pesanan = 'menunggu'";
+$result_pelanggan = $conn->query($sql_pelanggan);
+
+if ($result_pelanggan && $row = $result_pelanggan->fetch_assoc()) {
+    $pelanggan_aktif = $row['total_aktif'];
+}
+
+// Get active customers details
+$sql_pelanggan_detail = "SELECT c.IdCustomer, c.Nama, c.No_Telepon, COUNT(p.idPesanan) as jumlah_pesanan
+                         FROM customer c
+                         JOIN pesanan p ON c.IdCustomer = p.Customer_idCustomer
+                         WHERE p.status_pesanan = 'menunggu'
+                         GROUP BY c.IdCustomer";
+$result_pelanggan_detail = $conn->query($sql_pelanggan_detail);
+
+// Calculate monthly income
+$pendapatan_bulan_ini = 0;
+$bulan_ini = date('Y-m');
+$sql_pendapatan = "SELECT SUM(jumlah_pembayaran) AS total_pendapatan 
+                   FROM pembayaran 
+                   WHERE DATE_FORMAT(tanggal_pembayaran, '%Y-%m') = '$bulan_ini' 
+                   AND status_pembayaran = 'lunas'";
+$result_pendapatan = $conn->query($sql_pendapatan);
+
+if ($result_pendapatan && $row = $result_pendapatan->fetch_assoc()) {
+    $pendapatan_bulan_ini = $row['total_pendapatan'] ? $row['total_pendapatan'] : 0;
+}
+
+// Calculate previous month income for percentage
+$bulan_lalu = date('Y-m', strtotime('-1 month'));
+$pendapatan_bulan_lalu = 0;
+$persentase = 0;
+
+$sql_bulan_lalu = "SELECT SUM(jumlah_pembayaran) AS total_pendapatan 
+                   FROM pembayaran 
+                   WHERE DATE_FORMAT(tanggal_pembayaran, '%Y-%m') = '$bulan_lalu' 
+                   AND status_pembayaran = 'lunas'";
+$result_bulan_lalu = $conn->query($sql_bulan_lalu);
+
+if ($result_bulan_lalu && $row = $result_bulan_lalu->fetch_assoc()) {
+    $pendapatan_bulan_lalu = $row['total_pendapatan'] ? $row['total_pendapatan'] : 0;
+}
+
+if ($pendapatan_bulan_lalu > 0 && $pendapatan_bulan_ini > 0) {
+    $persentase = (($pendapatan_bulan_ini - $pendapatan_bulan_lalu) / $pendapatan_bulan_lalu) * 100;
+}
+
+// Handle Add Service
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nama_layanan'])) {
     $nama = $conn->real_escape_string($_POST['nama_layanan']);
     $harga = (float)$_POST['harga'];
@@ -211,11 +253,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nama_layanan'])) {
     exit();
 }
 
-// Handle Hapus Layanan
+// Handle Delete Service
 if (isset($_GET['delete'])) {
     $id = (int)$_GET['delete'];
 
-    $stmt = $conn->prepare("DELETE FROM Layanan WHERE idLayanan = ?");
+    $stmt = $conn->prepare("DELETE FROM layanan WHERE idlayanan = ?");
     $stmt->bind_param("i", $id);
 
     if ($stmt->execute()) {
@@ -227,11 +269,11 @@ if (isset($_GET['delete'])) {
     }
 
     $stmt->close();
-    header("Location: indexAdmin.php");
+    header("Location: IndexAdmin.php");
     exit();
 }
 
-// Ambil Data Layanan
+// Get Service Data
 $result = $conn->query("SELECT * FROM Layanan ORDER BY idLayanan DESC");
 ?>
 
@@ -326,8 +368,6 @@ $result = $conn->query("SELECT * FROM Layanan ORDER BY idLayanan DESC");
               </div>
               <p class="text-3xl font-bold text-gray-800"><?= $total_pesanan ?></p>
               <div class="mt-2 flex items-center text-sm text-green-600">
-                <i class="fas fa-arrow-up mr-1"></i>
-                <span>+2 dari bulan lalu</span>
               </div>
             </div>
             
@@ -338,10 +378,18 @@ $result = $conn->query("SELECT * FROM Layanan ORDER BY idLayanan DESC");
                   <i class="fas fa-money-bill-wave text-green-600"></i>
                 </div>
               </div>
-              <p class="text-3xl font-bold text-gray-800">Rp -</p>
-              <div class="mt-2 flex items-center text-sm text-red-600">
-                <i class="fas fa-arrow-down mr-1"></i>
-                <span>Belum ada pendapatan</span>
+              <p class="text-3xl font-bold text-gray-800">Rp <?= number_format($pendapatan_bulan_ini, 0, ',', '.') ?></p>
+              <div class="mt-2 flex items-center text-sm <?= $pendapatan_bulan_ini > $pendapatan_bulan_lalu ? 'text-green-600' : ($pendapatan_bulan_ini < $pendapatan_bulan_lalu ? 'text-red-600' : 'text-gray-600') ?>">
+                <?php if ($pendapatan_bulan_ini > 0 && $pendapatan_bulan_lalu > 0): ?>
+                  <i class="fas fa-arrow-<?= $pendapatan_bulan_ini > $pendapatan_bulan_lalu ? 'up' : 'down' ?> mr-1"></i>
+                  <span><?= round(abs($persentase), 2) ?>% <?= $pendapatan_bulan_ini > $pendapatan_bulan_lalu ? 'naik' : 'turun' ?> dari bulan lalu</span>
+                <?php elseif ($pendapatan_bulan_ini > 0): ?>
+                  <i class="fas fa-arrow-up mr-1"></i>
+                  <span>Pendapatan bulan ini</span>
+                <?php else: ?>
+                  <i class="fas fa-info-circle mr-1"></i>
+                  <span>Belum ada pendapatan</span>
+                <?php endif; ?>
               </div>
             </div>
             
@@ -355,8 +403,47 @@ $result = $conn->query("SELECT * FROM Layanan ORDER BY idLayanan DESC");
               <p class="text-3xl font-bold text-gray-800"><?= $pelanggan_aktif ?></p>
               <div class="mt-2 flex items-center text-sm text-green-600">
                 <i class="fas fa-arrow-up mr-1"></i>
-                <span>+1 pelanggan baru</span>
+                <span>Pelanggan dengan pesanan menunggu</span>
               </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Active Customers Table -->
+        <section id="active-customers" class="mb-12">
+          <div class="bg-white rounded-xl shadow-sm p-6">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
+              <div>
+                <h2 class="text-xl font-bold text-gray-800 mb-1">Detail Pelanggan Aktif</h2>
+                <p class="text-gray-600">Pelanggan dengan pesanan dalam status menunggu</p>
+              </div>
+            </div>
+            
+            <div class="overflow-x-auto">
+              <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                  <tr>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No. Telp</th>
+                  </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                  <?php if ($result_pelanggan_detail && $result_pelanggan_detail->num_rows > 0): ?>
+                    <?php while ($customer = $result_pelanggan_detail->fetch_assoc()): ?>
+                      <tr>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><?= htmlspecialchars($customer['IdCustomer']) ?></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><?= htmlspecialchars($customer['Nama']) ?></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><?= htmlspecialchars($customer['No_Telepon']) ?></td>
+                      </tr>
+                    <?php endwhile; ?>
+                  <?php else: ?>
+                    <tr>
+                      <td colspan="5" class="px-6 py-4 text-center text-sm text-gray-500">Tidak ada pelanggan aktif</td>
+                    </tr>
+                  <?php endif; ?>
+                </tbody>
+              </table>
             </div>
           </div>
         </section>
@@ -505,7 +592,13 @@ $result = $conn->query("SELECT * FROM Layanan ORDER BY idLayanan DESC");
     });
   </script>
   
-<?php $conn->close(); ?>
+<?php 
+// Close database connections
+if (isset($result_pelanggan_detail)) {
+    $result_pelanggan_detail->close();
+}
+$conn->close();
+?>
 
 </body>
 </html>
