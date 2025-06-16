@@ -304,7 +304,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
           <i class="fas fa-headset text-2xl text-yellow-300"></i>
         </div>
         <h3 class="text-xl font-bold mb-2">Bantuan</h3>
-        <p class="text-gray-200">Butuh bantuan? Hubungi kami melalui WhatsApp di 0813-1212-0433.</p>
+        <p class="text-gray-200">Butuh bantuan? Hubungi kami melalui WhatsApp di 081234567890.</p>
       </div>
     </div>
   </div>
@@ -343,15 +343,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
           <ul class="space-y-2 text-gray-300">
             <li class="flex items-start">
               <i class="fas fa-map-marker-alt mt-1 mr-2 text-yellow-300"></i>
-              <span>📍JL. Krukah Selatan 106, Wonokromo</span>
+              <span>Jl. Sepatu No. 123, Kota Sepatu</span>
             </li>
             <li class="flex items-start">
               <i class="fas fa-phone mt-1 mr-2 text-yellow-300"></i>
-              <span>0813-1212-0433</span>
+              <span>0812-3456-7890</span>
             </li>
-            <li class="flex items-start"> 
+            <li class="flex items-start">
               <i class="fab fa-instagram mt-1 mr-2 text-yellow-300"></i>
-              <span>@sneakandtreat</span></a>
+              <span>@sneakandtreat</span>
             </li>
           </ul>
         </div>
